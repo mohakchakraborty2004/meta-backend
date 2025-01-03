@@ -1,5 +1,7 @@
 import express from "express"; 
 import cors from "cors";
+import prisma from "./db";
+import  router from "./Routes/AuthRoutes"
 
 const app = express();
 
@@ -7,13 +9,9 @@ app.use(cors());
 app.use(express.json()); 
 
 
-app.post("/api/v1/signup", async (req : any, res: any) => {
-   
-})
+app.use("/api/v1/", router);
 
-app.post("/api/v1/signin", async (req : any, res: any) => {
-
-})
+app.use("/api/v1/",router);
 
 
 

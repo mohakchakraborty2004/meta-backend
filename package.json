@@ -13,6 +13,7 @@
     "@types/express": "^5.0.0"
   },
   "dependencies": {
+    "@prisma/client": "^6.1.0",
     "@types/cors": "^2.8.17",
     "cors": "^2.8.5",
     "prisma": "^6.1.0"
