@@ -1,6 +1,9 @@
 import  express  from "express";
 import prisma from "../db";
 import jwt from "jsonwebtoken";
+import { userRouter } from "./user";
+import { spaceRouter } from "./space";
+import { adminRouter } from "./admin";
 
 const router = express.Router();
 
@@ -90,5 +93,18 @@ try {
     console.log("error while logging in");
 }
 })
+
+router.get("/avatars", async (req: any, res: any) => {
+    //get all the avatars to select one from 
+})
+
+router.get("/elements", async(req: any, res: any)=> {
+    // get all the elements to be added in space
+    })
+
+
+router.use("/user", userRouter);
+router.use("/space", spaceRouter);
+router.use("/admin", adminRouter);   
 
 export default router
