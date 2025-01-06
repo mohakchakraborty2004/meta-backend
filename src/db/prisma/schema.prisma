@@ -19,9 +19,74 @@ User
 }
 
 model User {
-  id String @id @unique @default(cuid())
-  email String @unique
+  id       String @id @unique @default(cuid())
+  email    String @unique
   password String @unique
-  avatarID String?
-  role Role
+  avatarID String 
+  //relations
+  avatar Avatars @relation(fields: [avatarID], references: [id])
+  role     Role
+  spaces   Space[]
+}
+
+model Avatars {
+  id       String @id @unique @default(cuid())
+  name     String 
+  imageUrl String
+  userID   String
+  //relations
+  user     User[] //one avatar can have multiple users
+}
+
+model Space {
+    id        String          @id @unique @default(cuid())
+    name      String 
+    width     Int
+    height    Int
+    thumbnail String
+    creatorID String
+    //relations
+    creator   User            @relation(fields: [creatorID], references: [id])// which user created 
+    elements  spaceElements[] //space has a set of elements
+}
+
+model spaceElements {
+   id           String    @id @unique @default(cuid())
+   elementID    String
+   spaceID      String
+   height       Int
+   width        Int
+   //relations
+   element      Elements  @relation(fields: [elementID], references: [id])// which element(s)
+   space        Space     @relation(fields: [spaceID], references: [id])// every space element belongs to one or multiple spaces
+}
+
+model Elements {
+   id       String          @id @unique @default(cuid())
+   height   Int
+   width    Int
+   ImageUrl String
+   //relations
+   maps     MapElements[] //every element belongs to multiple maps
+   spaces   spaceElements[] //every element belongs to multiple spaces
+}
+
+model Map {
+   id          String      @id @unique @default(cuid())
+   width       Int
+   height      Int
+   name        String
+   //relations
+   MapElements MapElements[] // every map has multiple elements
+}
+
+model MapElements {
+   id        String   @id @unique @default(cuid())
+   elementID String
+   mapID     String
+   x         Int
+   y         Int
+   //relations
+   element   Elements @relation(fields: [elementID], references: [id])// which element(s)
+   map       Map      @relation(fields: [mapID], references: [id]) // which map element(s) belong to which map
 }

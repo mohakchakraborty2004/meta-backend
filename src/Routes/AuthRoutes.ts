@@ -28,7 +28,8 @@ router.post("/signup", async(req: any , res: any)=> {
             data : {
                 email,
                 password,
-                role
+                role, 
+                avatarID : req.body.avatarID
             }
         })
     
