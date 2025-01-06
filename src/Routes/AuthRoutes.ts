@@ -28,8 +28,7 @@ router.post("/signup", async(req: any , res: any)=> {
             data : {
                 email,
                 password,
-                role, 
-                avatarID : req.body.avatarID
+                role,
             }
         })
     
@@ -96,11 +95,41 @@ try {
 })
 
 router.get("/avatars", async (req: any, res: any) => {
-    //get all the avatars to select one from 
+    try {
+
+        const response =  await prisma.avatars.findMany()
+
+        if(response){
+            return res.json({
+                msg : "select the avatars",
+                response
+            })
+        }
+        
+    } catch (error) {
+        console.log("error in fetching avatars");
+        console.log(error);
+    }
 })
 
 router.get("/elements", async(req: any, res: any)=> {
     // get all the elements to be added in space
+    try {
+
+        const response =  await prisma.elements.findMany()
+
+        if(response){
+            return res.json({
+                msg : "select the avatars",
+                response
+            })
+        }
+        
+    } catch (error) {
+        console.log("error in fetching avatars");
+        console.log(error);
+    }
+
     })
 
 
