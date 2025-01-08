@@ -1,8 +1,10 @@
-import express from "express";
+import express, { Request, Response } from "express";
+import { adminMiddleware } from "./authMiddlewares/admin";
 
 export const adminRouter =  express.Router();
 
-adminRouter.post("/createElement", async(req: any, res: any)=> {
+
+adminRouter.post("/createElement", adminMiddleware, async(req: Request, res: Response)=> {
     //create an element to be added in the element section, can only be done by the creator.
 })
 
