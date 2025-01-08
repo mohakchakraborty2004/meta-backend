@@ -19,10 +19,11 @@ User
 }
 
 model User {
-  // add a username feature
+ 
   id       String @id @unique @default(cuid())
+  username String @unique
   email    String @unique
-  password String @unique //remove unique field from here
+  password String  
   avatarID String? 
   //relations
   avatar Avatars? @relation(fields: [avatarID], references: [id])

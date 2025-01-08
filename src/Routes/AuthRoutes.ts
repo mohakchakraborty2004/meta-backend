@@ -4,13 +4,17 @@ import jwt from "jsonwebtoken";
 import { userRouter } from "./user";
 import { spaceRouter } from "./space";
 import { adminRouter } from "./admin";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const router = express.Router();
+const JWT_SECRET = process.env.JWT_SECRET;
 
 
 router.post("/signup", async(req: any , res: any)=> {
     try {
-        const {email ,password, role} = req.body; 
+        const {email ,password, role, username} = req.body; 
 
         const exstEmail = await prisma.user.findUnique({
             where : {
@@ -26,6 +30,7 @@ router.post("/signup", async(req: any , res: any)=> {
     
         const response = await prisma.user.create({
             data : {
+                username,
                 email,
                 password,
                 role,
@@ -40,6 +45,7 @@ router.post("/signup", async(req: any , res: any)=> {
                 id,
                role : response.role
             }, "secret")
+            // need to change it JWT_SECRET, but some error persists.
 
         
 

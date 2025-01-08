@@ -36,28 +36,32 @@ userRouter.get("/metadata/bulk",userAuth, async (req: any, res: any) => {
     // route to get all the users meta data, well basically search feature
     // for now adding feature to search one user at a time
     try {
-        const username = req.body.username;
+        const usernamesString = req.query.usernames;
+        // "api/v1/user/metadata/bulk?usernames=`encoded array of usernames`"
+        // frontend call should be like GET `/api/v1/metadata/bulk?ids=${encodeURIComponent(JSON.stringify(usernames))}`
+        // where usernames is an array encoded in string format
+        const username = JSON.parse(usernamesString);
         
-        const response = await prisma.user.findUnique({
+        const response = await prisma.user.findMany({
             where : {
                 username 
+            },
+            select : {
+                avatar: true,
+                id: true
             }
         })
 
         if (response) {
-            // const avatarID = response?.avatarID
-        
-            // const avatar = await prisma.avatars.findUnique({
-            //     where : {
-            //         id : avatarID
-            //     }
-            // })
             res.status(200).json({
                 msg : "user found", 
                 response
             })
         }
     } catch (error) {
-        
+        console.log(error);
+        return res.status(402).json({
+            msg: "some error occured"
+        })
     }
 })
