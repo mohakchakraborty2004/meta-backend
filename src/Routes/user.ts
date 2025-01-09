@@ -40,11 +40,13 @@ userRouter.get("/metadata/bulk",userAuth, async (req: any, res: any) => {
         // "api/v1/user/metadata/bulk?usernames=`encoded array of usernames`"
         // frontend call should be like GET `/api/v1/metadata/bulk?ids=${encodeURIComponent(JSON.stringify(usernames))}`
         // where usernames is an array encoded in string format
-        const username = JSON.parse(usernamesString);
+        const usernames = JSON.parse(usernamesString);
         
         const response = await prisma.user.findMany({
             where : {
-                username 
+                username : {
+                    in : usernames
+                }
             },
             select : {
                 avatar: true,
@@ -55,7 +57,10 @@ userRouter.get("/metadata/bulk",userAuth, async (req: any, res: any) => {
         if (response) {
             res.status(200).json({
                 msg : "user found", 
-                response
+                avatars : response.map(r => ({
+                    userID : r.id,
+                    avatarID : r.avatar?.imageUrl
+                }))
             })
         }
     } catch (error) {
