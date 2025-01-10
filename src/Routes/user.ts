@@ -1,3 +1,5 @@
+// this route is complete and needs to be tested
+
 import express from "express"; 
 import { userAuth } from "./authMiddlewares/user";
 import prisma from "../db";

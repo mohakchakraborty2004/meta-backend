@@ -1,3 +1,5 @@
+// this route is complete and needs to be tested
+
 import express from "express"; 
 import { userAuth } from "./authMiddlewares/user";
 import prisma from "../db";
@@ -225,13 +227,92 @@ try {
 spaceRouter.post("/element",userAuth, async(req: any, res: any)=> {
     //add an element into the space 
     try {
-        
+        const spaceId =  req.body.spaceId;
+
+        const space = await prisma.space.findUnique({
+            where : {
+                id : spaceId,
+                creatorID : req.userId
+            },
+            select : {
+                width : true,
+                height :  true
+            }
+        })
+
+        if (!space) {
+            return res.status(404).json({
+                msg : "space not found bro"
+            })
+        }
+
+        const response  =  await prisma.spaceElements.create({
+            data : {
+                spaceID : spaceId,
+                elementID : req.body.elementID,
+                height : req.body.height,
+                width : req.body.width
+            }
+        })
+
+        if(response){
+            return res.status(200).json({
+                msg : "element added"
+            })
+        }else {
+            return res.json({
+                msg : "some error occured"
+            }) 
+        }
+
     } catch (error) {
-        
+        console.log(error);
+        res.status(500).json({
+            msg : "internal server error"
+        })
     }
 })
 
 spaceRouter.delete("/RemoveElement",userAuth, async(req: any, res: any)=> {
     //delete the element added to the space, not from the section where all the element exists.
+    try {
+        const spaceId =  req.body.spaceId;
+
+        const spaceElements = await prisma.spaceElements.findFirst({
+            where : {
+                id : req.body.spaceElementId
+            },
+            include : {
+                space : true
+            }
+        })
+
+        if(!spaceElements?.space.creatorID ||spaceElements?.space.creatorID != req.userId || !spaceElements ){
+            return res.status(404).json({
+                msg : "either the space element not found or the user is unauthorized"
+            })
+        }
+
+        const response = await prisma.spaceElements.delete({
+            where : {
+                id : req.body.spaceElementId
+            }
+        })  
+
+        if(response) {
+            return res.status(200).json({
+                msg : "element deleted"
+            })
+        } else {
+            return res.json({
+                msg : "some error occured"
+            })
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg : "internal server error"
+        })
+    }
 })
 

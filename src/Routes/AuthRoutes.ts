@@ -1,3 +1,5 @@
+// this route is complete and needs to be tested
+
 import  express  from "express";
 import prisma from "../db";
 import jwt from "jsonwebtoken";
