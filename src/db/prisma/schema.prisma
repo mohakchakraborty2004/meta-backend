@@ -56,8 +56,8 @@ model spaceElements {
    id           String    @id @unique @default(cuid())
    elementID    String
    spaceID      String
-   height       Int
-   width        Int
+   x            Int     //x position of the element
+   y            Int     //y position of the element
    //relations
    element      Elements  @relation(fields: [elementID], references: [id])// which element(s)
    space        Space     @relation(fields: [spaceID], references: [id])// every space element belongs to one or multiple spaces

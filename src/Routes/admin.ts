@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import { adminMiddleware } from "./authMiddlewares/admin";
+import prisma from "../db";
 
 export const adminRouter =  express.Router();
 

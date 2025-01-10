@@ -67,8 +67,8 @@ let space = await prisma.$transaction(async()=> {
         data :  map.MapElements.map(m => ({
           spaceID : m.id,
           elementID : m.elementID,
-          width : m.y,
-          height : m.x
+          y : m.y,
+          x : m.x
         }))
     })
 
@@ -200,18 +200,27 @@ try {
     const spaceElements = await prisma.spaceElements.findMany({
         where : {
             spaceID : spaceId
+        },
+        include : {
+            element : true
         }
     })
      
     if(spaceElements){
       return  res.status(200).json({
             msg : "elements fetched", 
-            elements : spaceElements.map(s => ({
+            dimensions : `${space.height} x ${space.width}`,
+            S_elements : spaceElements.map(s => ({
                 id : s.id,
-                elementId : s.elementID,
-                x : s.height,
-                y : s.width
-            }))
+                elements : {
+                    id : s.element.id,
+                    imgURL : s.element.ImageUrl,
+                    height : s.element.height,
+                    width : s.element.width
+                },
+                x : s.element.height, //x
+                y : s.element.width //y
+            })),
         })
     }
 
@@ -250,8 +259,8 @@ spaceRouter.post("/element",userAuth, async(req: any, res: any)=> {
             data : {
                 spaceID : spaceId,
                 elementID : req.body.elementID,
-                height : req.body.height,
-                width : req.body.width
+                x : req.body.height,
+                y : req.body.width
             }
         })
 
