@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Avatars" ALTER COLUMN "userID" DROP NOT NULL;

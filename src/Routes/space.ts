@@ -218,8 +218,8 @@ try {
                     height : s.element.height,
                     width : s.element.width
                 },
-                x : s.element.height, //x
-                y : s.element.width //y
+                x : s.x, //x
+                y : s.y //y
             })),
         })
     }

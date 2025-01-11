@@ -35,7 +35,7 @@ model Avatars {
   id       String @id @unique @default(cuid())
   name     String 
   imageUrl String
-  userID   String
+  userID   String?
   //relations
   user     User[] //one avatar can have multiple users
 }
