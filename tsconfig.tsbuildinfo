@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/routes/authroutes.ts","./src/routes/middleware.ts","./src/db/index.ts"],"version":"5.7.2"}
+{"root":["./src/index.ts","./src/routes/authroutes.ts","./src/routes/admin.ts","./src/routes/space.ts","./src/routes/user.ts","./src/routes/authmiddlewares/admin.ts","./src/routes/authmiddlewares/user.ts","./src/db/index.ts","./src/types/globaltype.d.ts","./src/wsserver/websocket.ts"],"version":"5.7.2"}

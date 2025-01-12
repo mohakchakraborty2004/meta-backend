@@ -1,6 +1,5 @@
 import express from "express"; 
 import cors from "cors";
-import prisma from "./db";
 import  router from "./Routes/AuthRoutes"
 
 const app = express();

@@ -27,6 +27,7 @@ userRouter.post("/metadata",userAuth, async (req: any, res: any)=> {
         })
     }
  } catch (error) {
+    console.log(error);
     res.status(402).json({
         msg : "some error occured"
     });
