@@ -25,13 +25,9 @@ export class RedisManager {
     }
 
     //this can be wrong probably.
-    public async publish(spaceId : string, x: number, y:number) {
+    public async publish(spaceId : string, message: any) {
         const channel = `space:${spaceId}`;
-        const message: any = {
-            x,
-            y
-        }
-        await this.pub.publish(channel, message)
+        await this.pub.publish(channel,JSON.stringify(message))
         console.log("published");
     }
 }

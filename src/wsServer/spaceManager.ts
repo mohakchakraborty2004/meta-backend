@@ -14,7 +14,8 @@ interface join {
 }
 
 interface move {
-    action : Action, 
+    action : Action,
+    spaceId : string, 
     x: Number, 
     y: Number
 }
@@ -57,9 +58,8 @@ class spaceManager {
                 console.log("space added to map");
                 //subscribtion addition here
                 this.pubsub.subscribe(spaceId, (message) => {
-                    const x = message.x;
-                    const y = message.y;
-                  this.Move(x, y)
+                   
+                  this.Move(message)
                 })
                 ws.send(JSON.stringify("Space Joined"));
             } else {
@@ -77,13 +77,32 @@ class spaceManager {
 
     }
 
-    public handleMessage(){
+    public handleMessage(message: any, ws: WebSocket){
         //check for the jwt authorization 
+        const parsedMessage = JSON.parse(message);
+
+        if(parsedMessage.action == "join") {
+           this.join(parsedMessage.spaceId, ws);
+        }else if(parsedMessage.action == "move") {
+            this.pubsub.publish(parsedMessage.spaceId, message);
+        }else {
+            console.log("wrong action");
+            ws.send("wrong action");
+        }
 
     }
 
-    public Move(){
-        //make a move 
+    public Move(message : any){
+
+        const parsedMessage: move = JSON.parse(message);
+
+        
+        //make move checks. (todo)
+        this.spaces.get(parsedMessage.spaceId)?.forEach((member) => {
+            member.send(JSON.stringify(parsedMessage));
+          });
+          
+        
         // (publish) send to all the other websocket joined the move and update on frontend accordingly.
         //make server send a message that movement is made.
     }
