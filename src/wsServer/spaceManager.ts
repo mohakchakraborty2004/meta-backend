@@ -1,5 +1,6 @@
 import WebSocket from "ws";
 import prisma from "../db";
+import { RedisManager } from "./redisManager";
 
 enum Action {
     join,
@@ -37,9 +38,11 @@ type spaceMap = Map<String, Set<WebSocket>>;
 class spaceManager {
 
     private spaces: spaceMap;
+    private pubsub: RedisManager;
 
     constructor() {
         this.spaces = new Map();
+        this.pubsub = new RedisManager();
     }
 
     public async join (spaceId : string, ws: WebSocket){
@@ -53,6 +56,11 @@ class spaceManager {
                 this.spaces.get(spaceId)?.add(ws);
                 console.log("space added to map");
                 //subscribtion addition here
+                this.pubsub.subscribe(spaceId, (message) => {
+                    const x = message.x;
+                    const y = message.y;
+                  this.Move(x, y)
+                })
                 ws.send(JSON.stringify("Space Joined"));
             } else {
                 this.spaces.get(spaceId)?.add(ws);
