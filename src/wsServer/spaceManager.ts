@@ -36,7 +36,7 @@ where : {
 // create a spaceId Map that fetches the space ids and stores it in the map against set of sockets.
 type spaceMap = Map<String, Set<WebSocket>>;
 
-class spaceManager {
+export class spaceManager {
 
     private spaces: spaceMap;
     private pubsub: RedisManager;
@@ -64,6 +64,7 @@ class spaceManager {
                 ws.send(JSON.stringify("Space Joined"));
             } else {
                 this.spaces.get(spaceId)?.add(ws);
+                ws.send(JSON.stringify("space joined"));
             }
         } else {
             ws.send(JSON.stringify("No Space found for that ID"))
@@ -84,6 +85,7 @@ class spaceManager {
         if(parsedMessage.action == "join") {
            this.join(parsedMessage.spaceId, ws);
         }else if(parsedMessage.action == "move") {
+            console.log(parsedMessage);
             this.pubsub.publish(parsedMessage.spaceId, message);
         }else {
             console.log("wrong action");
@@ -93,14 +95,23 @@ class spaceManager {
     }
 
     public Move(message : any){
-
+        console.log("inside Move");
         const parsedMessage: move = JSON.parse(message);
 
-        
+        console.log(parsedMessage);
+
+        if(this.spaces.has(parsedMessage.spaceId)){
+
+            console.log(parsedMessage);
+
+            this.spaces.get(parsedMessage.spaceId)?.forEach((member) => {
+                console.log("sent");
+                member.send(JSON.stringify(parsedMessage));
+              });
+
+        }
         //make move checks. (todo)
-        this.spaces.get(parsedMessage.spaceId)?.forEach((member) => {
-            member.send(JSON.stringify(parsedMessage));
-          });
+      
           
         
         // (publish) send to all the other websocket joined the move and update on frontend accordingly.

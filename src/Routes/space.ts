@@ -11,17 +11,22 @@ spaceRouter.post("/create",userAuth, async (req: any, res: any)=> {
 // there should be a option which fetches all the pre existing spaces and chosing one of the creates the space.
 try {
  //selects a map from the given set of created maps.
+ console.log("reached here");
  const mapId = req.body.mapId;
+ const userId = req.userId;
  if(!mapId){
+    console.log("reached here 1");
+    console.log(userId);
     const response = await prisma.space.create({
         data : {
            name : req.body.name,
-           width : req.body.width,
-           height : req.body.height,
+           width : parseInt(req.body.width),
+           height : parseInt(req.body.height),
            thumbnail : req.body.thumbnail,//a link of img 
-           creatorID : req.userId
+           creatorID : userId
         }
     })
+    console.log("reached here 2");
 
     return res.status(200).json({
         msg : "empty space created",
