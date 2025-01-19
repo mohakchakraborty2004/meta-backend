@@ -96,15 +96,17 @@ export class spaceManager {
 
     public Move(message : any){
         console.log("inside Move");
-        const parsedMessage: move = JSON.parse(message);
+        const parsedMessage: move = JSON.parse(message.toString());
 
         console.log(parsedMessage);
 
-        if(this.spaces.has(parsedMessage.spaceId)){
+        const spaceId = parsedMessage.spaceId;
+
+        if(this.spaces.has(spaceId)){
 
             console.log(parsedMessage);
 
-            this.spaces.get(parsedMessage.spaceId)?.forEach((member) => {
+            this.spaces.get(spaceId)?.forEach((member) => {
                 console.log("sent");
                 member.send(JSON.stringify(parsedMessage));
               });
