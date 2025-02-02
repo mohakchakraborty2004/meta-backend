@@ -80,7 +80,7 @@ https://github.com/user-attachments/assets/12bacf36-b311-43d0-84cc-6c5a1ea98b67
 ## 🖼️ Screenshots
 
 ### WebSocket Connections
-![Websockets]((assets/websocket.png))
+![Websockets](assets/websocket.png)
 
 ## 📬 API Endpoints
 
